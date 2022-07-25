@@ -17,6 +17,8 @@ export interface PixelMessage extends MessageEvent {
     | CartData
     | PromoViewData
     | PromotionClickData
+    | AddToWishlistData
+    | RemoveFromWishlistData
 }
 
 export interface EventData {
@@ -410,3 +412,30 @@ export interface CommertialOffer {
 }
 
 export type ProductViewReferenceId = Array<Item['referenceId']>
+
+export interface AddToWishlistData extends EventData {
+  event: 'addToWishlist'
+  eventName: 'vtex:addToWishlist'
+  wishlistEventObject: WishlistEventObject
+}
+
+export interface RemoveFromWishlistData extends EventData {
+  event: 'removeFromWishlist'
+  eventName: 'vtex:removeFromWishlist'
+  wishlistEventObject: WishlistEventObject
+}
+
+export interface WishlistEventObject {
+  action?: string
+  button_type?: string
+  page_type?: string
+  product_id?: string
+  product_title?: string
+  item_price?: number
+  item_quantity?: number
+  product_brand?: string
+  categories_path?: string
+  category_level_1?: string
+  category_level_2?: string
+  category_level_3?: string
+}

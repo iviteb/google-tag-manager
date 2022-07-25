@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import updateEcommerce from './updateEcommerce'
 import {
   Order,
@@ -90,6 +91,31 @@ export async function sendEnhancedEcommerceEvents(e: PixelMessage) {
       return
     }
 
+    case 'vtex:addToWishlist': {
+      const { wishlistEventObject } = e.data
+
+      const event = {
+        event: 'add_to_wishlist',
+        ecommerce: {
+          items: [
+            {
+              item_name: wishlistEventObject.product_title,
+              item_id: wishlistEventObject.product_id,
+              price: wishlistEventObject.item_price,
+              item_brand: wishlistEventObject.product_brand,
+              item_category: wishlistEventObject.category_level_1,
+              item_category2: wishlistEventObject.category_level_2,
+              quantity: wishlistEventObject.item_quantity,
+            },
+          ],
+        },
+      }
+
+      updateEcommerce('add_to_wishlist', event)
+
+      return
+    }
+
     case 'vtex:productClick': {
       const { product, position } = e.data as ProductClickData
       const {
@@ -155,8 +181,12 @@ export async function sendEnhancedEcommerceEvents(e: PixelMessage) {
               name: item.name, // Product name
               price:
                 item.priceIsInt === true
-                  ? `${item.price / 100}`
-                  : `${item.price}`,
+                  ? `${
+                      item.sellingPrice
+                        ? (item.sellingPrice / 100).toFixed(2)
+                        : (item.price / 100).toFixed(2)
+                    }`
+                  : `${item.sellingPrice ?? item.price}`,
               quantity: item.quantity,
               dimension1: item.productRefId ?? '',
               dimension2: item.referenceId ?? '', // SKU reference id
@@ -188,8 +218,12 @@ export async function sendEnhancedEcommerceEvents(e: PixelMessage) {
               name: item.name, // Product name
               price:
                 item.priceIsInt === true
-                  ? `${item.price / 100}`
-                  : `${item.price}`,
+                  ? `${
+                      item.sellingPrice
+                        ? (item.sellingPrice / 100).toFixed(2)
+                        : (item.price / 100).toFixed(2)
+                    }`
+                  : `${item.sellingPrice ?? item.price}`,
               quantity: item.quantity,
               dimension1: item.productRefId ?? '',
               dimension2: item.referenceId ?? '', // SKU reference id
