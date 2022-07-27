@@ -1,9 +1,11 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/display-name */
 import { canUseDOM } from 'vtex.render-runtime'
 
 import { sendEnhancedEcommerceEvents } from './modules/enhancedEcommerceEvents'
 import { sendExtraEvents } from './modules/extraEvents'
 import { sendLegacyEvents } from './modules/legacyEvents'
-import { PixelMessage } from './typings/events'
+import type {PixelMessage} from './typings/events'
 
 // no-op for extension point
 export default function() {

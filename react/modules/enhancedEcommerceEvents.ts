@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import updateEcommerce from './updateEcommerce'
 import {
   Order,
@@ -28,6 +29,31 @@ const defaultReference = { Value: '' }
 
 export async function sendEnhancedEcommerceEvents(e: PixelMessage) {
   switch (e.data.eventName) {
+    case 'vtex:addToWishlist': {
+      const { wishlistEventObject } = e.data
+
+      const event = {
+        event: 'add_to_wishlist',
+        ecommerce: {
+          items: [
+            {
+              item_name: wishlistEventObject.product_title,
+              item_id: wishlistEventObject.product_id,
+              price: wishlistEventObject.item_price,
+              item_brand: wishlistEventObject.product_brand,
+              item_category: wishlistEventObject.category_level_1,
+              item_category2: wishlistEventObject.category_level_2,
+              quantity: wishlistEventObject.item_quantity,
+            },
+          ],
+        },
+      }
+
+      updateEcommerce('add_to_wishlist', event)
+
+      return
+    }
+
     case 'vtex:productView': {
       const {
         productId,
