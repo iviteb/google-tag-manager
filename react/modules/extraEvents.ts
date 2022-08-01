@@ -34,7 +34,11 @@ async function loginEvent(e: PixelMessage): Promise<void> {
     }
   })
 
-  observer.observe(document, {
+  const loginPopup = document.getElementsByClassName(
+    'vtex-flex-layout-0-x-flexRowContent--headerRow2Icons'
+  )[0]
+
+  observer.observe(loginPopup, {
     attributes: false,
     childList: true,
     characterData: false,
