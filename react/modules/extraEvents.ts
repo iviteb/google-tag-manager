@@ -111,7 +111,9 @@ export async function sendExtraEvents(e: PixelMessage) {
     case 'vtex:userData': {
       const { data } = e
 
-      await loginEvent(e)
+      setTimeout(async () => {
+        await loginEvent(e)
+      }, 3000)
 
       if (!data.isAuthenticated) {
         return
